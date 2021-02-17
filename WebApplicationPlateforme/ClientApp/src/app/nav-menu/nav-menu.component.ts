@@ -78,6 +78,8 @@ export class NavMenuComponent implements OnInit {
   testrole: boolean = false;
   testroledir: boolean = false;
   testroleadmin: boolean = false;
+  demg1: DemPayCheque[] = [];
+  demg2: DemPayCheque[] = [];
   getUserConnected() {
 
     this.UserService.getUserProfileObservable().subscribe(res => {
@@ -105,9 +107,11 @@ export class NavMenuComponent implements OnInit {
           this.demandeService.Get().subscribe(res => {
             this.dem1 = res
             if (this.testrole == true) {
-              this.dem2 = this.dem1.filter(item => item.etatgeneral == "تحت الإجراء" && +item.etatnum < 3);
-              this.dem3 = this.dem2.filter(item => item.idparfinancier != this.UserIdConnected || item.idfinancier != this.UserIdConnected || item.idpart != this.UserIdConnected)
-              this.nbr = this.dem3.length
+              this.dem3 = this.dem2.filter(item => item.idparfinancier != this.UserIdConnected && item.idfinancier != this.UserIdConnected && item.idpart != this.UserIdConnected)
+              this.demg1 = this.dem2.filter(item => +item.etatnum < 3);
+              this.demg2 = this.dem1.filter(item => item.attribut5 == this.UserIdConnected && item.attribut3 == "editer");
+
+              this.nbr = this.demg1.length + this.demg2.length
             }
 
             if (this.testroledir == true) {

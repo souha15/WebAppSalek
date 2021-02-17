@@ -14,7 +14,9 @@
               <h4>طلبات الموظفين</h4>
               <div class="row">
                 <div class="col text-center px-2 py-3">
-                  <span class="num">{{nbRequests}}</span>
+                  <span class="num" *ngIf="testroledir">{{nbd}}</span>
+                  <span class="num" *ngIf="testrole">{{nbr}}</span>
+                 
                   <br />
                   <a class="show" [routerLink]="['/cheque-pay-list-pay']">عرض</a>
                 </div>

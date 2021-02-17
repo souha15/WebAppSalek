@@ -1231,7 +1231,7 @@ import { TicketDetailClientComponent } from './Maintenance/ticket-detail-client/
 
       { path: 'filesorg-lis', component: FilesorgLisComponent, canActivate: [AuthGuard], data: { permittedRoles: ['ADMINISTRATEUR'] } },
 
-      { path: 'filesorg-menu', component: FilesorgMenuComponent, canActivate: [AuthGuard], data: { permittedRoles: ['ADMINISTRATEUR'] } },
+      { path: 'filesorg-menu', component: FilesorgMenuComponent, canActivate: [AuthGuard] },
 
       { path: 'files-employee', component: FilesEmployeeComponent, canActivate: [AuthGuard], data: { permittedRoles: ['ADMINISTRATEUR'] } },
 

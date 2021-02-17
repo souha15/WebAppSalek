@@ -68,24 +68,37 @@
                 <tr>
 
                   <th scope="col">#</th>
-                  <th scope="col">رقم المعاملة</th>
-               
-                  <th scope="col">تاريخ التسجيل</th>
-                  <th scope="col">الأولوية</th>
-                  <th scope="col">درجة السرية</th>
+                  <th scope="col">م </th>
+                  <th scope="col"> التاريخ</th>
+                  <th scope="col">الجهة</th>
+                  <th scope="col">الموضوع</th>
+                  <th scope="col">المستلم</th>
+                  <th scope="col">الحالة</th>
 
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let tr of FiltredList |  orderBy: key : reverse | filter:filter| paginate: { itemsPerPage: 5, currentPage: p }">
+                <tr *ngFor="let tr of FiltredList |  orderBy: key : reverse | filter:filter| paginate: { itemsPerPage: count, currentPage: p }; index as i;">
 
                   <td (click)="populateForm(tr)"><input type="radio" name="modelGroup" value="modelGroup"></td>
-                  <td (click)="populateForm(tr)">{{tr.id}}</td>
-                  
-                  <td (click)="populateForm(tr)">{{tr.date}}</td>
-                  <td (click)="populateForm(tr)">{{tr.priorite}}</td>
-                  <td (click)="populateForm(tr)">{{tr.securite}}</td>
 
+
+                  <td (click)="populateForm(tr)">{{(p-1) * count + i + 1}}</td>
+                  <td (click)="populateForm(tr)">{{tr.date}}</td>
+                  <td (click)="populateForm(tr)" *ngIf="tr.nomOrg!==null">{{tr.nomOrg}}</td>
+                  <td (click)="populateForm(tr)" *ngIf="tr.nomProp!==null">{{tr.nomProp}}</td>
+                  <td (click)="populateForm(tr)">{{tr.sujet}}</td>
+                  <td (click)="populateForm(tr)">{{tr.attribut3}}</td>
+                  <td  (click)="populateForm(tr)" [ngClass]="{
+
+    'wait': tr.etat === 'تحت الإجراء',
+    'done': tr.etat === 'مستلمة',
+    'closed': tr.etat === 'محفوظة'
+
+
+}">
+                    {{tr.etat}}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -380,6 +393,7 @@
                         <label for="explain"><span><i class="fa fa-file"></i></span>الشرح</label>
                         <textarea class="form-control" id="explain" cols="30" rows="2" name="details" #details="ngModel" [(ngModel)]="affectation.details"></textarea>
                       </div>
+                   
                       <div class="col-sm-6">
                         <label for="files2" class="files-label">
                           <ul class="d-flex list-unstyled">
@@ -511,6 +525,9 @@
                 <input type="file" id="files2" class="" (change)="upload($event)" #inputFile>
               </div>
               <div class="col-sm-6">
+                <p></p>
+              </div>
+              <div class="col-sm-6">
 
                 <ul *ngFor="let pd of serviceupload.listTr;" style="list-style: none">
                   <li *ngIf="Idtransaction == pd.idtransaction">
@@ -521,6 +538,28 @@
                     </a>
                   </li>
                 </ul>
+              </div>
+
+              <div class="col-sm-6">
+                <label>قائمة المرفقات</label>
+
+                <div class="table-responsive new-table2" *ngIf="filesexist">
+                  <table class="table table-bordered text-center table-striped">
+                    <thead class="thead-primary">
+                      <tr>
+                        <th scope="col">المرفق</th>
+                        <th scope="col">حذف</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let dp of listPjFiltred">
+                        <td>{{dp.path}}</td>
+                        <td><a (click)="del66(dp.id)"><i class="fa fa-times" style="color:red;font-size:20px"></i></a></td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               <div class="col-12 my-3 text-left">

@@ -1,4 +1,68 @@
-<app-nav-menu></app-nav-menu>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light main-nav">
+  <a class="navbar-brand" href="#"><img src="assets/images/logo000.png" alt=""></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/home']">الرئيسية <span class="sr-only">(current)</span></a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/news-list-viewer']">المركز الإعلامي</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/main-tasks']">ادارة المهام</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="!testrole" [routerLink]="['/mailing']">الإتصالات الإدارية</a>
+        <a class="nav-link" *ngIf="testrole" [routerLink]="['/menutr']">الإتصالات الإدارية</a>
+      </li>
+      <li class="nav-item">
+
+        <a class="nav-link" [routerLink]="['/event-list']">إدارة الفعاليات</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/liste-dotation']"> إدارة العقارات</a>
+      </li>
+      <!--  <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/users-list']">الموظفين</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/main-finance-page']">المالية</a>
+      </li>
+      -->
+    </ul>
+    <div class="my-2 my-lg-0" *ngIf="userDetails">
+
+      <a *ngIf="testroledir" [routerLink]="['/alerts']" class="ml-2 alert-btn notification"><span class="badge" *ngIf="nbd!=0">{{nbd}}</span><i class="fa fa-bell fa-lg"></i></a>
+      <a *ngIf="testrole" [routerLink]="['/alerts']" class="ml-2 alert-btn notification"><span class="badge" *ngIf="nbr!=0">{{nbr}}</span><i class="fa fa-bell fa-lg"></i></a>
+      <a *ngIf="testroleadmin" [routerLink]="['/alerts']" class="ml-2 alert-btn notification"><span class="badge"></span><i class="fa fa-bell fa-lg"></i></a>
+      <a href="#" class="msg-btn"><i class="fa fa-envelope fa-lg"></i></a>
+      <button class="btn  user-btn my-2 my-sm-0 mx-3"> مرحبا {{userDetails.fullName}}</button>
+    </div>
+    <div class="dropdown d-inline-block">
+      <a href="#" class="user-img dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <!---<img  src="/uploads/{{userDetails.photo}}" alt="user-image">-->
+        <img src="assets/images/avatar.png" alt="user-image" *ngIf="sexe == 'ذكر'">
+        <img src="assets/images/logowomen.jpg" alt="user-image" *ngIf="sexe == 'أنثى'">
+      </a>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" [routerLink]="['/user-info']">بيانات الموظف</a>
+        <!-- <a class="dropdown-item" [routerLink]="['/user-change-pasword']">تغيير كلمة  المرور</a>-->
+        <a class="dropdown-item" (click)="onLogout()" href="">خروج</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
 <!-- Page Content -->
 <div class="content">
   <div class="row">
@@ -26,7 +90,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let cg of dem2 |  orderBy: key : reverse | filter:filter| paginate: { itemsPerPage: count, currentPage: p };let i = index">
+              <tr *ngFor="let cg of dem6 |  orderBy: key : reverse | filter:filter| paginate: { itemsPerPage: count, currentPage: p };let i = index">
                 <th (click)="populateForm(cg)" data-toggle="modal" data-target="#myModal1">{{(p-1) * count + i + 1}}</th>
                 <td (click)="populateForm(cg)" data-toggle="modal" data-target="#myModal1">{{cg.calsse}}</td>
                 <td (click)="populateForm(cg)" data-toggle="modal" data-target="#myModal1">{{cg.demandeur}}</td>
@@ -41,7 +105,8 @@
   'denied': cg.etatgeneral === 'مرفوضة',
   'accord': cg.etatgeneral === 'موافقة',
   'worke': cg.etatgeneral === 'تحت الإجراء',
-  'wait': cg.etatgeneral === 'في الإنتظار'
+  'wait': cg.etatgeneral === 'في الإنتظار',
+  'towork': cg.etatgeneral === 'للإنجاز'
 }">
                   {{cg.etatgeneral}}
                 </td>
@@ -143,6 +208,11 @@
                 {{per.etatgeneral}}
 
               </div>
+              <div class="col-md-4" *ngIf="raistest">
+                <label for="permision-hours">السبب</label>
+                {{per.attibut1}}
+
+              </div>
               <div class="col-md-12">
                 <div class="table-responsive new-table2">
                   <table class="table table-bordered text-center table-striped">
@@ -201,7 +271,7 @@
                 <option value="إعتماد">إعتماد </option>
                 <option value="إعادة">إعادة</option>
                 <option value="رفض">رفض </option>
-             
+
 
               </select>
               &nbsp;&nbsp;&nbsp;&nbsp;

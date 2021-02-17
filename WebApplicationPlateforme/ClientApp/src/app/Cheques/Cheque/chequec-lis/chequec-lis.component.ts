@@ -56,8 +56,8 @@ export class ChequecLisComponent implements OnInit {
     this.articleService.Get().subscribe(res => {
       this.paycList2 = res
       this.paycList = this.paycList2.filter(item => item.idCheque == this.id)
-      console.log(this.paycList.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()));
-      return this.paycList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      return this.paycList.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      
     })
   }
   p: Number = 1;

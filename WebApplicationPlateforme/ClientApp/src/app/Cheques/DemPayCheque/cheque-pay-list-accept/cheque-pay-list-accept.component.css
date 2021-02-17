@@ -1,4 +1,25 @@
+.main-nav {
+  background: #276985 !important;
+}
 
+.notification {
+  background-color: none;
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+  position: relative;
+  display: inline-block;
+}
+
+  .notification .badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    padding: 5px 10px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+  }
 #MyTable td:hover {
   background-color: #ccc;
 }
@@ -146,29 +167,32 @@ body.noscroll {
 .leave-request-list table thead {
   background-color: #91c3d8;
 }
-
-.notdonee {
-  background: #dc3545;
+.wait {
+  background: #dbcf46;
 }
 
-.donee {
-  background: #28a745;
+.success {
+  background: #2aa830;
 }
 
 .worke {
-  background: #007bff;
+  background: #2a86a8;
 }
 
-.receive {
-  background: #28a745;
+.towork {
+  background: #4c32a8;
+}
+
+.denied {
+  background: #ed4b1a;
 }
 
 .wait {
   background: #faec2f;
 }
 
-.finished {
-  background: #7fdb90;
+.accord {
+  background: #e88c3c;
 }
 
 .retarde {

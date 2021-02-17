@@ -120,7 +120,9 @@ export class MyListeTrComponent implements OnInit {
 
   alltransaction() {
     this.transactionService.List().subscribe(res => {
-      this.alltr=res
+      this.alltr = res
+
+      return this.alltr.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     })
   }
 

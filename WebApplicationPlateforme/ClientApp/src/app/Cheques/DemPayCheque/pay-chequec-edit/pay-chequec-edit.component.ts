@@ -148,6 +148,12 @@ export class PayChequecEditComponent implements OnInit {
 
     } else {
       this.isValidFormSubmitted = true;
+
+      if (this.ch.etatgeneral == "للإنجاز") {
+        this.ch.attribut3 = "editer"
+      } else {
+        this.ch.attribut3=""
+      }
       this.ch.dateenreg = this.date;
       this.ch.creatorName = this.UserNameConnected;
       this.ch.idUserCreator = this.UserIdConnected;

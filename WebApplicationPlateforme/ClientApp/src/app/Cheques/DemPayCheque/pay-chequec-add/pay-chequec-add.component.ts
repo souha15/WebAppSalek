@@ -106,7 +106,9 @@ export class PayChequecAddComponent implements OnInit {
   getthelastId() {
     this.demandeService.Get().subscribe(res => {
       this.list = res;
-       this.max = 0;
+      this.id = this.list.length + 1;
+      this.ch.numdem = this.id
+       /*this.max = 0;
       this.list.forEach(item => {
         if (item.id > this.max) {
           this.max = item.id
@@ -114,7 +116,7 @@ export class PayChequecAddComponent implements OnInit {
       })
       this.id = this.max + 1;
       this.ch.numdem = this.id
-      console.log(this.max)
+      console.log(this.max)*/
     })
   }
   //Create Cheque
@@ -163,7 +165,7 @@ export class PayChequecAddComponent implements OnInit {
         this.artest = false;
         this.arlis.splice(0, this.arlis.length)
         this.i = 0;
-        this.id = 0;
+        this.getthelastId();
         this.toastr.success("تم التسجيل بنجاح", "نجاح")
         form.resetForm();
       },

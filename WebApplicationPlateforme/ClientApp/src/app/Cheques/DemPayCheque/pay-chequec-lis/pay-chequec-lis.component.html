@@ -43,7 +43,8 @@
   'denied': cg.etatgeneral === 'مرفوضة',
   'accord': cg.etatgeneral === 'موافقة',
   'worke': cg.etatgeneral === 'تحت الإجراء',
-  'wait': cg.etatgeneral === 'في الإنتظار'
+  'wait': cg.etatgeneral === 'في الإنتظار',
+  'towork': cg.etatgeneral === 'للإنجاز'
 }">
                   {{cg.etatgeneral}}
                 </td>
@@ -140,6 +141,11 @@
               <div class="col-md-4">
                 <label for="permision-hours">الحالة</label>
                 {{per.etatgeneral}}
+
+              </div>
+              <div class="col-md-4" *ngIf="raistest">
+                <label for="permision-hours">السبب</label>
+                {{per.attibut1}}
 
               </div>
               <div class="col-md-12">

@@ -245,5 +245,9 @@ namespace WebApplicationPlateforme.Data
         public DbSet<FilesTickets> filesTickets { get; set; }
 
 
+        /*********** Demande Pay Cheque ***************/
+
+        public DbSet<DemPayCheqNotif> demPayCheqNotifs { get; set; }
+        public DbSet<ActionOnDemPayCheq> actionOnDemPayCheqs { get; set; }
     }
 }

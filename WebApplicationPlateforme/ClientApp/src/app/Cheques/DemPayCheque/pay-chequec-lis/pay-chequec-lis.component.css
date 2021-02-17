@@ -146,7 +146,6 @@ body.noscroll {
 .leave-request-list table thead {
   background-color: #91c3d8;
 }
-
 .wait {
   background: #dbcf46;
 }
@@ -157,6 +156,10 @@ body.noscroll {
 
 .worke {
   background: #2a86a8;
+}
+
+.towork {
+  background: #4c32a8;
 }
 
 .denied {

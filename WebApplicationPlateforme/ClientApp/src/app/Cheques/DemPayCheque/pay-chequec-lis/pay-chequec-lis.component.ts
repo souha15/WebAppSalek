@@ -76,13 +76,18 @@ export class PayChequecLisComponent implements OnInit {
   //PopulateForm
   per: DemPayCheque = new DemPayCheque();
   per1: DemPayCheque = new DemPayCheque();
-
+  raistest: boolean = false
 
   populateForm(conge: DemPayCheque) {
     this.per = Object.assign({}, conge)
     this.articleService.Get().subscribe(res => {
       this.arlis2 = res;
       this.arlis = this.arlis2.filter(item => item.idDem == this.per.id)
+      if (this.per.attibut1 != null) {
+        this.raistest = true;
+      } else {
+        this.raistest = false
+      }
     })
   }
 

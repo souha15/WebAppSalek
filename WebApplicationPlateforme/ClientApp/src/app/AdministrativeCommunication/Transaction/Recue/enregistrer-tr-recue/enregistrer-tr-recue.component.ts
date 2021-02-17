@@ -138,7 +138,7 @@ export class EnregistrerTRRecueComponent implements OnInit {
       this.tr.userNameCreator = this.UserNameConnected;
       this.tr.dateenreg = this.date;
       this.tr.idUserCreator = this.UserIdConnected;
-      this.tr.date = this.date
+
 
       this.tr.type = "recue"
       this.tr.etat = "تحت الإجراء"

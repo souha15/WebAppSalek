@@ -71,7 +71,8 @@ export class EnregRComponent implements OnInit {
   }
 
   UsersList: UserDetail[] = [];
-
+  p: Number = 1;
+  count: Number = 5;
   getUsersList() {
     this.UserService.GetUsersList().subscribe(res => {
       this.UsersList = res
@@ -168,6 +169,18 @@ export class EnregRComponent implements OnInit {
   dateaffectation: string;
   etabname1: string;
   etabname2: string;
+  filesexist: boolean = false;
+
+  del66(Id) {
+    this.serviceupload.deletePjTr(Id).subscribe(res => {
+      this.serviceupload.SearchTr().subscribe(res => {
+        this.listPj = res
+        this.listPjFiltred = this.listPj.filter(item => item.idtransaction == this.tr.id)
+    })
+    })
+  }
+
+
   populateForm(transaction: Transaction) {
     this.transactionService.formData = Object.assign({}, transaction);
     this.tr = Object.assign({}, transaction)
@@ -178,8 +191,14 @@ export class EnregRComponent implements OnInit {
       this.listPj = res
       this.tr = Object.assign({}, transaction)
       this.listPjFiltred = this.listPj.filter(item => item.idtransaction == this.tr.id)
+      if (this.listPjFiltred.length != 0) {
+        this.filesexist=true
+      } else {
+        this.filesexist = false
 
+      }
     })
+
 
     // Liaison
 
@@ -644,8 +663,28 @@ export class EnregRComponent implements OnInit {
       this.isValidFormSubmittedTR = true;
       this.transactionService.PutObservable(this.tr).subscribe(
         res => {
+
+          this.pj.idUserCreator = this.tr.idUserCreator;
+          let datef = Date.now();
+          this.pj.date = new Date(datef).toLocaleDateString();
+          this.pj.idtransaction = this.tr.id;
+          let path = this.rootUrl.getPath();
+          this.pj.creatorName = this.tr.userNameCreator
+          this.fileslist.forEach(item => {
+            this.pj.path = item;
+            console.log(item)
+            this.http.post(path + '/PiecesJointesTrs', this.pj)
+              .subscribe(res => {
+                this.serviceupload.refreshListTr();
+                this.GetFileName();
+
+              });
+          })
           form.resetForm()
           this.TransactionList();
+          this.listPjFiltred.length = 0;
+          this.listPjFiltred = [];
+          this.filesexist = false;
           this.toastr.success("تم تعديل المعاملة بنجاح", "نجاح");
         },
         err => {

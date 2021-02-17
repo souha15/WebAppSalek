@@ -33,7 +33,7 @@
               <div class="link-box">
 
                 <a [routerLink]="['/main-tasks']">
-                  <span class="notify-badge">{{nb}}</span>
+                  <span class="notify-badge" *ngIf="shownb">{{nb}}</span>
                   <span class="d-block">
                     <i class="fa fa-tasks fa-3x"></i>
                   </span>
@@ -50,6 +50,7 @@
             <div class="col-sm-6 col-md-3 my-4">
               <div class="link-box">
                 <a *ngIf="!testrole" [routerLink]="['/mailing']">
+                  <span class="notify-badge" *ngIf="shownbtr">{{nbtr}}</span>
                   <span class="d-block">
                     <i class="fa fa-mail-bulk fa-3x"></i>
                   </span>

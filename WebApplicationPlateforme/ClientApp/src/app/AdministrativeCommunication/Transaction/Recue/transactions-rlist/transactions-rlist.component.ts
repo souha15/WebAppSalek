@@ -82,6 +82,7 @@ export class TransactionsRListComponent implements OnInit {
       this.nbreceived = this.alltr.length;
       this.nbwork = this.alltr.filter(item => item.etat == "تحت الإجراء" || item.etat == "مستلمة").length;
       this.nbregistred = this.alltr.filter(item => item.etat == "محفوظة").length;
+      return this.alltr.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
     })
 

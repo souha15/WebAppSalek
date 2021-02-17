@@ -8,6 +8,8 @@ import { Recrutement } from '../shared/Models/RH/recrutement.model';
 import { Conge } from '../shared/Models/RH/conge.model';
 import { Equipement } from '../shared/Models/RH/equipement.model';
 import { UserServiceService } from '../shared/Services/User/user-service.service';
+import { DemPayCheque } from '../shared/Models/Cheques/dem-pay-cheque.model';
+import { DemPayChequeService } from '../shared/Services/Cheques/dem-pay-cheque.service';
 
 @Component({
   selector: 'app-alerts',
@@ -20,20 +22,79 @@ export class AlertsComponent implements OnInit {
     private recrutementService: RecrutementService,
     private equipementService: EquipementService,
     private permissionService: PermissionService,
-    private UserService: UserServiceService) { }
+    private UserService: UserServiceService,
+    private demandeService: DemPayChequeService,) { }
 
   ngOnInit(): void {
     this.getUserConnected();
-    this.CalculRequests();
+   // this.CalculRequests();
   }
 
   //Get Id User Connected
-  idUser: string;
-  
+  UserIdConnected: string;
+  UserNameConnected: string;
+  privtestaddTask: boolean = false;
+  privtestfinance: boolean = false;
+  privtesttransaction: boolean = false;
+  privtestTasks: boolean = false;
+  sexe: string;
+  roleslist: any = [];
+  testrole: boolean = false;
+  testroledir: boolean = false;
+  testroleadmin: boolean = false;
+  demg1: DemPayCheque[] = [];
+  demg2: DemPayCheque[] = [];
+  dem1: DemPayCheque[] = [];
+  dem2: DemPayCheque[] = [];
+  dem3: DemPayCheque[] = [];
+  dem4: DemPayCheque[] = [];
+  nbr: number = 0;
+  nbd: number = 0;
   getUserConnected() {
 
+
     this.UserService.getUserProfileObservable().subscribe(res => {
-      this.idUser = res.id;
+      this.UserIdConnected = res.id;
+      this.UserNameConnected = res.fullName;
+      this.sexe = res.sexe;
+      this.UserService.getUserRoles(this.UserIdConnected).subscribe(res => {
+        this.roleslist = res;
+        this.roleslist.forEach(item => {
+          if (item == "RESPFINANCE") {
+            this.testrole = true;
+          } else { this.testrole = false; }
+          if (item == "DIRECTORG") {
+            this.testroledir = true;
+          } else {
+            this.testroledir = false;
+          }
+
+          if (item == "ADMINISTRATEUR") {
+            this.testroleadmin = true;
+          } else {
+            this.testroleadmin = false;
+          }
+
+          this.demandeService.Get().subscribe(res => {
+            this.dem1 = res
+            if (this.testrole == true) {
+              this.dem3 = this.dem2.filter(item => item.idparfinancier != this.UserIdConnected && item.idfinancier != this.UserIdConnected && item.idpart != this.UserIdConnected)
+              this.demg1 = this.dem2.filter(item => +item.etatnum < 3);
+              this.demg2 = this.dem1.filter(item => item.attribut5 == this.UserIdConnected && item.attribut3 == "editer");
+
+              this.nbr = this.demg1.length + this.demg2.length
+            }
+
+            if (this.testroledir == true) {
+              this.dem4 = this.dem1.filter(item => item.etatgeneral == "موافقة" && +item.etatnum == 3);
+              this.nbd = this.dem4.length;
+            }
+
+
+          })
+        })
+
+      })
     })
 
   }
@@ -55,7 +116,7 @@ export class AlertsComponent implements OnInit {
   Fequlis: Equipement[] = [];
   nbEqu: number;
   nbRequests: number;
-  CalculRequests() {
+  /*CalculRequests() {
     this.congeService.Get().subscribe(res => {
       this.conglis = res
       this.Fconglis = this.conglis.filter(item => item.directeurid == this.idUser && item.attribut2 == "في الانتظار")
@@ -83,5 +144,5 @@ export class AlertsComponent implements OnInit {
       })
     })
 
-  }
+  }*/
 }
