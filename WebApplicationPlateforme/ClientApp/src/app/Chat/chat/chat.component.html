@@ -1,0 +1,150 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js"></script>
+<app-nav-menu></app-nav-menu>
+
+<div class="content">
+  <div class="row">
+    <div class="col-md-3 col-sm-4">
+      <app-side-menu></app-side-menu>
+    </div>
+
+    <div class="col-md-9 col-sm-8">
+
+
+      <div class="container-fluid h-100">
+        <div class="row justify-content-center h-100">
+          <div class="col-md-5 col-xl-4 chat">
+            <div class="card mb-sm-5 mb-md-3 contacts_card">
+              <div class="card-header">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+                  </div>
+                  <input type="text" placeholder="Search..." name="search" [(ngModel)]="filter" class="form-control search">
+
+                </div>
+              </div>
+              <div class="card-body contacts_body">
+                <ui class="contacts" *ngFor="let user of users| filter:filter">
+                  <li class="active" (click)="showmessages(user)">
+                    <div class="d-flex bd-highlight">
+                      <div class="img_cont" *ngIf="user.photo != null">
+                        <img src="/uploads/{{user.photo}}" class="rounded-circle user_img" >&nbsp;&nbsp;
+                   
+
+                      </div>
+
+                      <div class="img_cont" *ngIf="user.photo == null">
+
+                        <img src="assets/images/logochat.png" alt="user-image" class="rounded-circle user_img" >
+
+                      </div>
+                      <div class="user_info">
+                        &nbsp;&nbsp;  <span>{{user.fullName}}</span>
+                      </div>
+                    </div>
+                  </li>
+              
+                </ui>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="col-md-7 col-xl-8 chat" >
+            <div class="card" *ngIf="msgtest">
+              <div class="card-header msg_head">
+                <div class="d-flex bd-highlight">
+                  <div class="img_cont" *ngIf="user.photo != null">
+                    <img src="/uploads/{{user.photo}}" class="rounded-circle user_img" >&nbsp;&nbsp;
+
+                  </div>
+
+                  <div class="img_cont" *ngIf="user.photo == null">
+        
+                    <img src="assets/images/logochat.png" alt="user-image" class="rounded-circle user_img" >&nbsp;&nbsp;
+
+                  </div>
+
+                  <div class="user_info">
+                    &nbsp;&nbsp;<span>{{user.fullName}}</span>&nbsp;&nbsp;
+                    &nbsp;&nbsp;  <p>&nbsp;&nbsp; {{nbmsg}}&nbsp;&nbsp; رسالة&nbsp;&nbsp;</p>
+                  </div>
+                </div>
+      
+              </div>
+              <div class="cardscroll">
+              <div class="card-body msg_card_body" *ngFor="let msg of finalchatList">
+
+                <!-- YOU -->
+                <div class="d-flex justify-content-start mb-4" *ngIf="msg.userIdSender == UserIdConnected">
+
+
+                  <div class="img_cont_msg" *ngIf="photo != null">
+                    <img src="/uploads/{{photo}}" class="rounded-circle user_img_msg">
+                  </div>
+
+                  <div class="img_cont_msg" *ngIf="photo == null">
+                    <img src="assets/images/logochat.png" alt="user-image" class="rounded-circle user_img_msg">
+                  </div>&nbsp;&nbsp;
+                  <div class="msg_cotainer">
+
+                    {{msg.message}}
+                    <span class="msg_time">{{msg.date}}</span>
+                  </div>
+
+                </div>
+
+                <!-- HIM -->
+                <div class="d-flex justify-content-end mb-4" *ngIf="msg.userIdReceiver == UserIdConnected">
+
+
+                  <div class="msg_cotainer_send">
+                    {{msg.message}}
+                    <span class="msg_time_send">{{msg.date}}</span>
+                  </div>&nbsp;&nbsp;
+                  <br />
+                  <div class="img_cont_msg" *ngIf="user.photo != null">
+                    <img src="/uploads/{{user.photo}}" class="rounded-circle user_img_msg">&nbsp;&nbsp;
+
+                  </div>
+
+                  <div class="img_cont_msg" *ngIf="user.photo == null">
+
+                    <img src="assets/images/logochat.png" alt="user-image" class="rounded-circle user_img_msg">&nbsp;&nbsp;
+                  </div>
+                </div>
+
+              </div>
+              </div>
+
+              <div class="card-footer">
+                <div class="input-group">
+                  <div class="input-group-append">
+                    <span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+                  </div>
+                  <textarea name="" class="form-control type_msg" placeholder="Type your message..." [value]="txtMessage"
+                   (input)="txtMessage=$event.target.value" (keydown.enter)="sendMessage()"></textarea>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+</div>
+<!-- Footer -->
+<footer class="text-center">
+  <p>جمعية الدعوة والإرشاد وتوعية الجاليات في محافظة أبوعريش  <img src="assets/images/logo000.png" style="width:40px;height:40px;"> </p>
+</footer>

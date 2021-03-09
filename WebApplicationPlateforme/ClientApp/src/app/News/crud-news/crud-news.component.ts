@@ -57,8 +57,8 @@ export class CrudNewsComponent implements OnInit {
   FnewsList: News[] = [];
   getNewsList() {
     this.newsService.Get().subscribe(res => {
-      this.FnewsList = res
-      this.newsList = this.FnewsList.filter(item => item.idUserCreator == this.UserIdConnected)
+      this.newsList = res
+      //this.newsList = this.FnewsList.filter(item => item.idUserCreator == this.UserIdConnected)
  
     })
   }

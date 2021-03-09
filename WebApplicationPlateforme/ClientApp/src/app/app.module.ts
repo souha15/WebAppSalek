@@ -387,6 +387,7 @@ import { TicketListAgentComponent } from './Maintenance/ticket-list-agent/ticket
 import { TicketDetailAgentComponent } from './Maintenance/ticket-detail-agent/ticket-detail-agent.component';
 import { PageFrwardedToTicketListForAgentCodeComponent } from './Maintenance/page-frwarded-to-ticket-list-for-agent-code/page-frwarded-to-ticket-list-for-agent-code.component';
 import { TicketDetailClientComponent } from './Maintenance/ticket-detail-client/ticket-detail-client.component';
+import { ChatComponent } from './Chat/chat/chat.component';
 
 
 @NgModule({
@@ -744,6 +745,7 @@ import { TicketDetailClientComponent } from './Maintenance/ticket-detail-client/
     TicketDetailAgentComponent,
     PageFrwardedToTicketListForAgentCodeComponent,
     TicketDetailClientComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -1346,7 +1348,7 @@ import { TicketDetailClientComponent } from './Maintenance/ticket-detail-client/
 
       { path: 'chequec-details/:id', component: ChequecDetailsComponent, canActivate: [AuthGuard], data: { permittedRoles: ['ADMINISTRATEUR', 'DIRECTORG', 'CONSEILADMIN', 'SUPCONSEILADMIN', 'DIRECTOR', 'PARTRESP', 'PARTNORMAL', 'RESP', 'RESPFINANCE', 'SECRETAIRE'] }},
 
-      { path: 'pay-chequec-add', component: PayChequecAddComponent, canActivate: [AuthGuard], data: { permittedRoles: ['ADMINISTRATEUR', 'DIRECTORG', 'DIRECTOR', 'SECRETAIRE','PARTRESP'] }  },
+      { path: 'pay-chequec-add', component: PayChequecAddComponent, canActivate: [AuthGuard]  },
 
       { path: 'pay-chequec-lis', component: PayChequecLisComponent, canActivate: [AuthGuard] },
 
@@ -1494,15 +1496,16 @@ import { TicketDetailClientComponent } from './Maintenance/ticket-detail-client/
 
       { path: 'ticket-list-client', component: TicketListClientComponent, canActivate: [AuthGuard], data: { permittedRoles: ['ADMINISTRATEUR'] } },
 
-      { path: 'ticket-list-agent', component: TicketListAgentComponent },
+      { path: 'ticket-list-agent', component: TicketListAgentComponent, canActivate: [AuthGuard]},
 
-      { path: 'ticket-detail-agent', component: TicketDetailAgentComponent },
+      { path: 'ticket-detail-agent', component: TicketDetailAgentComponent, canActivate: [AuthGuard] },
 
       { path: 'page-frwarded-to-ticket-list-for-agent-code', component: PageFrwardedToTicketListForAgentCodeComponent },
 
       { path: 'ticket-detail-client', component: TicketDetailClientComponent, canActivate: [AuthGuard], data: { permittedRoles: ['ADMINISTRATEUR'] } },
+    /************ Chat **********/
 
-
+    { path: 'chat', component: ChatComponent, canActivate: [AuthGuard] },
 
     ])
   ],/*,  {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace WebApplicationPlateforme.Controllers.UserControllers
         private UserManager<ApplicationUser> _userManager;
         // private SignInManager<ApplicationUser> _singInManager;
         private readonly ApplicationSettings _appSettings;
-  
+
+
         public ApplicationUserController(UserManager<ApplicationUser> userManager, IOptions<ApplicationSettings> appSettings/*, SignInManager<ApplicationUser> signInManager*/)
         {
             _userManager = userManager;
@@ -103,8 +105,12 @@ namespace WebApplicationPlateforme.Controllers.UserControllers
             {
                 var result = await _userManager.CreateAsync(applicationUser, model.Password);
                 //await _userManager.AddToRoleAsync(applicationUser, model.Roles);
-             //   await _userManager.AddClaimAsync(applicationUser, new Claim(ClaimTypes.Email, model.Email));
-
+                //  await _userManager.AddClaimAsync(applicationUser, new Claim(ClaimTypes.Email, model.Email));
+                if (result.Succeeded)
+                {
+                    await _userManager.AddClaimAsync(applicationUser, new Claim(ClaimTypes.Name, model.UserName));
+                    await _userManager.AddClaimAsync(applicationUser, new Claim(ClaimTypes.NameIdentifier, model.UserName));
+                }
                 await _userManager.AddToRolesAsync(applicationUser, model.Roles);
                 return Ok(result);
             }
@@ -123,6 +129,7 @@ namespace WebApplicationPlateforme.Controllers.UserControllers
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
+                
                 //Get the Role assigned to this user 
                 var role = await _userManager.GetRolesAsync(user);
                 IdentityOptions _options = new IdentityOptions();
@@ -131,6 +138,7 @@ namespace WebApplicationPlateforme.Controllers.UserControllers
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim("UserID",user.Id.ToString()),
+                       // new Claim(_options.ClaimsIdentity.UserNameClaimType,user.UserName),
                         new Claim(_options.ClaimsIdentity.RoleClaimType,role.FirstOrDefault())
                     }),
                     Expires = DateTime.UtcNow.AddDays(1),

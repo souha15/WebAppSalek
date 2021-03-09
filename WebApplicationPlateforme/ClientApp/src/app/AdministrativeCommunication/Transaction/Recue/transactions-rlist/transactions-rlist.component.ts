@@ -76,14 +76,27 @@ export class TransactionsRListComponent implements OnInit {
   nbwork: number = 0;
   nbregistred: number = 0;
   aff1: Affectation[] = [];
+  aff2: Affectation[] = [];
+  last: Affectation[] = [];
   alltransaction() {
     this.transactionService.List().subscribe(res => {
       this.alltr = res
       this.nbreceived = this.alltr.length;
       this.nbwork = this.alltr.filter(item => item.etat == "تحت الإجراء" || item.etat == "مستلمة").length;
       this.nbregistred = this.alltr.filter(item => item.etat == "محفوظة").length;
-      return this.alltr.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+ 
+      this.affectationService.List().subscribe(res => {
+        this.aff1 = res
 
+        this.alltr.forEach(item => {
+          this.aff2 = this.aff1.filter(item1 => item1.idTransaction == item.id)
+          let last: any;
+          last = this.aff2.map(el => el.idTransaction).lastIndexOf(item.id);
+          item.attribut3 = this.aff2[last].nomUserAffected;
+
+      })
+      })
+      this.alltr.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     })
 
   }
@@ -161,7 +174,9 @@ export class TransactionsRListComponent implements OnInit {
   listPjFiltred: PiecesJointesTr[] = [];
   AffListS: Affectation[] = [];
   FAffListS: Affectation[] = [];
+  ppc: Affectation[] = [];
   FAffListSR: Affectation[] = [];
+  aff: Affectation = new Affectation();
   filesexist: boolean = false;
   suivieLis: Suivie[] = [];
   suivieModel: Suivie = new Suivie();
@@ -187,7 +202,10 @@ export class TransactionsRListComponent implements OnInit {
         this.AffListS = res
         this.FAffListS = this.AffListS.filter(item => item.idTransaction == this.tr.id)
         this.FAffListSR = this.FAffListS.reverse();
-
+        this.ppc = this.FAffListS.sort((a, b) => new Date(b.datenereg).getTime() - new Date(a.datenereg).getTime())
+        this.aff = this.ppc[this.ppc.length-1];
+        console.log(this.aff)
+ 
         if (this.FAffListS.length != null) {
           this.afftrue = true;
         } else {

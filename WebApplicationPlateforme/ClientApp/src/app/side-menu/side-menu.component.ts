@@ -40,7 +40,7 @@ export class SideMenuComponent implements OnInit {
             this.testrole = true;
           }
         })
-        console.log(this.testrole)
+
       })   
     })
   }

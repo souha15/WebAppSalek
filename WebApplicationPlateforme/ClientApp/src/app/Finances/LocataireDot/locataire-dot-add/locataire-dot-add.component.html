@@ -34,9 +34,9 @@
               <option [ngValue]="undefined" selected disabled>-العقار المؤجر-</option>
               <option *ngFor="let item of uniteList" value="{{item.id}}">{{item.numRevenus}}</option>
             </select>
-            <!-- <div *ngIf="idUnite.invalid && form.submitted && !isValidFormSubmitted" class="alert alert-danger">
+          <div *ngIf="idUnite.invalid && form.submitted && !isValidFormSubmitted" class="alert alert-danger">
      مطلوب العقار المؤجر.
-   </div>-->
+   </div>
           </div>
 
           <div class="col-md-6">

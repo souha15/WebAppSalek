@@ -46,7 +46,17 @@
       <a *ngIf="testroledir" [routerLink]="['/alerts']" class="ml-2 alert-btn notification"><span class="badge" *ngIf="nbd!=0">{{nbd}}</span><i class="fa fa-bell fa-lg"></i></a>
       <a *ngIf="testrole" [routerLink]="['/alerts']" class="ml-2 alert-btn notification"><span class="badge" *ngIf="nbr!=0">{{nbr}}</span><i class="fa fa-bell fa-lg"></i></a>
       <a *ngIf="testroleadmin" [routerLink]="['/alerts']" class="ml-2 alert-btn notification"><span class="badge"></span><i class="fa fa-bell fa-lg"></i></a>
-      <a href="#" class="msg-btn"><i class="fa fa-envelope fa-lg"></i></a>
+
+
+      <a class="ml-2 alert-btn notification nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="badge" *ngIf="nbmsg!=0">{{nbmsg}}</span><i class="fa fa-envelope fa-lg"></i></a>
+      <div class="dropdown-menu">
+
+        <a class="dropdown-item" [routerLink]="['/chat']">الرسائل</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" [routerLink]="['/chat']" *ngFor="let msg of notifmodel">رسالة جديدة من {{msg}}</a>
+
+
+      </div>
       <button class="btn  user-btn my-2 my-sm-0 mx-3"> مرحبا {{userDetails.fullName}}</button>
     </div>
     <div class="dropdown d-inline-block">

@@ -59,7 +59,7 @@ export class TasksListComponent implements OnInit {
           })
         }
       })
-      this.nbclose = this.filtredtachelist.filter(item => item.Attribut1 == "منجزة").length;
+      this.nbclose = this.filtredtachelist.filter(item => item.etat == "منجزة").length;
       this.nbnew = this.filtredtachelist.filter(item => item.etat == "في الإنتظار").length;
       this.nbcurrent = this.filtredtachelist.filter(item => item.etat == "تحت الإجراء").length;
       this.filtredtachelist.forEach(element => {

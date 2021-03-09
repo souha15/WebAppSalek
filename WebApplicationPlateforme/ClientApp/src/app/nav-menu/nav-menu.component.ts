@@ -7,6 +7,8 @@ import { Voiture } from '../shared/Models/voiture/voiture.model';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DemPayChequeService } from '../shared/Services/Cheques/dem-pay-cheque.service';
 import { DemPayCheque } from '../shared/Models/Cheques/dem-pay-cheque.model';
+import { ChatService } from '../shared/Services/Chat/chat.service';
+import { Chat } from '../shared/Models/Chat/chat.model';
 
 @Component({
   selector: 'app-nav-menu',
@@ -21,6 +23,7 @@ export class NavMenuComponent implements OnInit {
     private carsService: VoitureService,
     private toastr: ToastrService,
     private demandeService: DemPayChequeService,
+    private chatService: ChatService
   ) {}
 
   ngOnInit(): void {
@@ -37,8 +40,37 @@ export class NavMenuComponent implements OnInit {
         console.log(err);
       },
     );
+    this.getnotifchat();
   }
 
+
+
+  /// Chat Notif
+
+  notifmodel:string[]=[];
+  notifchat1: Chat[] = [];
+  notifchat2: Chat[] = [];
+  notifchat: Chat[] = [];
+  nbmsg: number = 0;
+  getnotifchat() {
+
+    this.chatService.ListChat().subscribe(res => {
+      this.notifchat1 = res
+      this.notifchat = this.notifchat1.filter(item => item.userIdReceiver == this.UserIdConnected && item.attribut1 == 0);
+  
+      if (this.notifchat.length != 0) {
+        this.notifchat.forEach(res => {
+          this.notifmodel.push(res.userNameSender);
+          this.nbmsg++
+
+        })
+
+      } else {
+        this.nbmsg = 0;
+      }
+      console.log(this.notifmodel);
+    })
+  }
 
   getUserProfile() {
    return  this.UserService.getUserProfile().subscribe(

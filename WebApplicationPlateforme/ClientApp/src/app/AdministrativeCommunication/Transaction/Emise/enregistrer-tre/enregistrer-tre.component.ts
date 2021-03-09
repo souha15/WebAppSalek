@@ -183,7 +183,8 @@ export class EnregistrerTREComponent implements OnInit {
       res => {
         this.UserIdConnected = res.id;
         this.UserNameConnected = res.fullName;
-       /* this.tr.idEtablissementUserCreator = res.idDepartement
+        this.tr.copieA = this.UserNameConnected;
+        /* this.tr.idEtablissementUserCreator = res.idDepartement
         this.tr.etablissementUserCreator = res.nomDepartement
         */
       

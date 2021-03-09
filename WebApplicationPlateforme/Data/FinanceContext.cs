@@ -28,6 +28,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Identity;
 using WebApplicationPlateforme.Model.Salaire;
 using WebApplicationPlateforme.Model.User_Services;
 using WebApplicationPlateforme.Model.Maintenance;
+using WebApplicationPlateforme.Model;
 
 namespace WebApplicationPlateforme.Data
 {
@@ -249,5 +250,9 @@ namespace WebApplicationPlateforme.Data
 
         public DbSet<DemPayCheqNotif> demPayCheqNotifs { get; set; }
         public DbSet<ActionOnDemPayCheq> actionOnDemPayCheqs { get; set; }
+
+        /************* Chat Partie ************/ 
+
+        public DbSet<ChatModel> chatModels { get; set; }
     }
 }

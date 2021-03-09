@@ -97,8 +97,9 @@ namespace WebApplicationPlateforme
             services.AddCors();
             /*services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
             services.AddSingleton<IMailer, Mailer>();*/
-
+            services.AddSingleton<IUserIdProvider, EmailBasedUserIdProvider>();
             services.AddSignalR();
+      
             //services.AddSingleton<IUserIdProvider, EmailBasedUserIdProvider>();
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0).AddNewtonsoftJson();/*.AddJsonOptions(x => { })*/;
             //services.AddControllersWithViews();
@@ -133,6 +134,7 @@ namespace WebApplicationPlateforme
 
                 };
             });
+
 
             services.Configure<IISServerOptions>(options =>
             {
@@ -223,12 +225,14 @@ namespace WebApplicationPlateforme
                 .AllowAnyMethod()
               //  .AllowCredentials()
             );
-            app.UseAuthentication();
 
-           /* app.UseSignalR(routes =>
-            {
-                routes.MapHub<NotifyHub>("/notify");
-            });*/
+
+            /* app.UseSignalR(routes =>
+             {
+                 routes.MapHub<NotifyHub>("/notify");
+             });*/
+
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
