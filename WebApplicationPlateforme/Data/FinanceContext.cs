@@ -29,6 +29,7 @@ using WebApplicationPlateforme.Model.Salaire;
 using WebApplicationPlateforme.Model.User_Services;
 using WebApplicationPlateforme.Model.Maintenance;
 using WebApplicationPlateforme.Model;
+using WebApplicationPlateforme.Model.Msg_Interne;
 
 namespace WebApplicationPlateforme.Data
 {
@@ -254,5 +255,14 @@ namespace WebApplicationPlateforme.Data
         /************* Chat Partie ************/ 
 
         public DbSet<ChatModel> chatModels { get; set; }
+
+
+
+        /***********  Msg Interne   ***************/
+
+        public DbSet<MsgInterne> msgInternes { get; set; }
+        public DbSet<NotifMsgInterne> notifMsgInternes { get; set; }
+        public DbSet<FilesMsgInterne> filesMsgInternes { get; set; }
+
     }
 }

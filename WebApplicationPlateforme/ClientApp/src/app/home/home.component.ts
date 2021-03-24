@@ -8,6 +8,8 @@ import { TransactionService } from '../shared/Services/AdministrativeCommunicati
 import { AffectationService } from '../shared/Services/AdministrativeCommunication/affectation.service';
 import { Transaction } from '../shared/Models/AdministrativeCommunication/transaction.model';
 import { Affectation } from '../shared/Models/AdministrativeCommunication/affectation.model';
+import { NotifMsgInterneService } from '../shared/Services/Msg Interne/notif-msg-interne.service';
+import { NotifMsgInterne } from '../shared/Models/Msg Interne/notif-msg-interne.model';
 
 @Component({
   selector: 'app-home',
@@ -20,15 +22,32 @@ export class HomeComponent implements OnInit {
     private notiftaskService: TacheNotifService,
     private TacheService: TacheService,
     private transactionService: TransactionService,
-    private affectationService: AffectationService,) { }
+    private affectationService: AffectationService,
+    private notifmsgService: NotifMsgInterneService) { }
 
   ngOnInit(): void {
     this.getUserConnected();
     this.getTransactionNotif();
-
+    this.notifmsg();
   }
 
+  notifnb: number = 0;
+  testnotifnb: boolean = false;
+  notifMsgList: NotifMsgInterne[] = [];
+  notifMsgList2: NotifMsgInterne[] = [];
 
+  notifmsg() {
+    this.notifmsgService.ListNotifMsgInterne().subscribe(res => {
+      this.notifMsgList2 = res;
+      this.notifMsgList = this.notifMsgList2.filter(item => item.userIdReceiver == this.UserIdConnected && item.seen == 0)
+      this.notifnb = this.notifMsgList.length;
+      if (this.notifnb != 0) {
+        this.testnotifnb = true;
+      } else {
+        this.testnotifnb = false;
+      }
+    })
+  }
   // Get User Connected
   UserIdConnected: string;
   UserNameConnected: string;

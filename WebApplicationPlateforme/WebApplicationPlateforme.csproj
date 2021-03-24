@@ -80,7 +80,6 @@
     <Folder Include="ClientApp\src\app\Tache\" />
     <Folder Include="ClientApp\src\app\User\" />
     <Folder Include="Controllers\CommunicationAdministrative\Decision\" />
-    <Folder Include="Model\NewFolder\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

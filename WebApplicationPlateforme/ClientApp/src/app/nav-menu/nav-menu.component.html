@@ -48,12 +48,12 @@
       <a *ngIf="testroleadmin" [routerLink]="['/alerts']" class="ml-2 alert-btn notification"><span class="badge"></span><i class="fa fa-bell fa-lg"></i></a>
 
 
-      <a class="ml-2 alert-btn notification nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="badge" *ngIf="nbmsg!=0">{{nbmsg}}</span><i class="fa fa-envelope fa-lg"></i></a>
+      <a class="ml-2 alert-btn notification nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="badge" *ngIf="testnotifnb">{{notifnb}}</span><i class="fa fa-envelope fa-lg"></i></a>
       <div class="dropdown-menu">
 
-        <a class="dropdown-item" [routerLink]="['/chat']">الرسائل</a>
+        <a class="dropdown-item" [routerLink]="['/msg-interne-list']">الرسائل</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" [routerLink]="['/chat']" *ngFor="let msg of notifmodel">رسالة جديدة من {{msg}}</a>
+        <a class="dropdown-item" *ngFor="let msg of notifMsgList"  [routerLink]="['/msg-interne-details' ,msg.idMsg]">رسالة جديدة من {{msg.userNameSender}}</a>
 
 
       </div>
@@ -67,6 +67,7 @@
       </a>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" [routerLink]="['/user-info']">بيانات الموظف</a>
+        <a class="dropdown-item" [routerLink]="['/user-change-pasword']">تغيير كلمة  المرور</a>
         <!-- <a class="dropdown-item" [routerLink]="['/user-change-pasword']">تغيير كلمة  المرور</a>-->
         <a class="dropdown-item" (click)="onLogout()" href="">خروج</a>
       </div>

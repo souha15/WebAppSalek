@@ -45,7 +45,7 @@ export class EventListComponent implements OnInit {
       this.UserService.getUserRoles(this.UserIdConnected).subscribe(res => {
         this.roleslist = res;
         this.roleslist.forEach(item => {
-          if (item == "ADMINISTRATEUR") {
+          if (item == "ADMINISTRATEUR" || item =="SECRETAIRE" ) {
             this.testrole = true;
           } else { this.testrole = false; }
         })

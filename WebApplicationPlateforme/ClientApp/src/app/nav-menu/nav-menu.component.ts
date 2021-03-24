@@ -9,6 +9,8 @@ import { DemPayChequeService } from '../shared/Services/Cheques/dem-pay-cheque.s
 import { DemPayCheque } from '../shared/Models/Cheques/dem-pay-cheque.model';
 import { ChatService } from '../shared/Services/Chat/chat.service';
 import { Chat } from '../shared/Models/Chat/chat.model';
+import { NotifMsgInterneService } from '../shared/Services/Msg Interne/notif-msg-interne.service';
+import { NotifMsgInterne } from '../shared/Models/Msg Interne/notif-msg-interne.model';
 
 @Component({
   selector: 'app-nav-menu',
@@ -19,11 +21,8 @@ export class NavMenuComponent implements OnInit {
   userDetails;
   constructor(private UserService: UserServiceService,
     private router: Router,
-    private privilegesService: PrivilegesService,
-    private carsService: VoitureService,
-    private toastr: ToastrService,
     private demandeService: DemPayChequeService,
-    private chatService: ChatService
+    private notifmsgService: NotifMsgInterneService
   ) {}
 
   ngOnInit(): void {
@@ -40,38 +39,43 @@ export class NavMenuComponent implements OnInit {
         console.log(err);
       },
     );
-    this.getnotifchat();
+
+    this.notifmsg();
+    this.autoSave();
   }
 
-
-
-  /// Chat Notif
-
-  notifmodel:string[]=[];
-  notifchat1: Chat[] = [];
-  notifchat2: Chat[] = [];
-  notifchat: Chat[] = [];
-  nbmsg: number = 0;
-  getnotifchat() {
-
-    this.chatService.ListChat().subscribe(res => {
-      this.notifchat1 = res
-      this.notifchat = this.notifchat1.filter(item => item.userIdReceiver == this.UserIdConnected && item.attribut1 == 0);
-  
-      if (this.notifchat.length != 0) {
-        this.notifchat.forEach(res => {
-          this.notifmodel.push(res.userNameSender);
-          this.nbmsg++
-
-        })
-
-      } else {
-        this.nbmsg = 0;
+  save: boolean = false;
+  intervale;
+  autoSave() {
+    this.intervale = setInterval(() => {
+      console.log('setTimeOut');
+      this.save = true;
+      if (this.UserIdConnected != null) {
+        this.getUserConnected();
+        this.notifmsg();
       }
-      console.log(this.notifmodel);
+
+    }, 1000);
+  }
+
+  /// Msg Notif
+  notifnb: number = 0;
+  testnotifnb: boolean = false;
+  notifMsgList: NotifMsgInterne[] = [];
+  notifMsgList2: NotifMsgInterne[] = [];
+
+  notifmsg() {
+    this.notifmsgService.ListNotifMsgInterne().subscribe(res => {
+      this.notifMsgList2 = res;
+      this.notifMsgList = this.notifMsgList2.filter(item => item.userIdReceiver == this.UserIdConnected && item.seen == 0)
+      this.notifnb = this.notifMsgList.length;
+      if (this.notifnb != 0) {
+        this.testnotifnb = true;
+      } else {
+        this.testnotifnb = false;
+      }
     })
   }
-
   getUserProfile() {
    return  this.UserService.getUserProfile().subscribe(
       res => {

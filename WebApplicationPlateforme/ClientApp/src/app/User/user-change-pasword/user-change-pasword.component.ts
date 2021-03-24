@@ -14,7 +14,7 @@ export class UserChangePaswordComponent implements OnInit {
     private toastr: ToastrService) { }
 
   ngOnInit(): void {
- ///   this.getUserConnected();
+   this.getUserConnected();
   }
 
 
@@ -25,19 +25,12 @@ export class UserChangePaswordComponent implements OnInit {
   getUserConnected() {
 
     this.userService.getUserProfileObservable().subscribe(res => {
-      this.UserIdConnected = res.id;
-      this.password = res.Password
-      console.log(this.password)
+      this.userdetail =res;
+
 
     })
   }
-  fullname:string
-  getfull(event) {
-    this.fullname = event.target.value;
-    this.userService.GetUserByUserName(this.fullname).subscribe(res => {
-      this.UserIdConnected = res.id;
-    })
-  }
+
 
   //Change Pasword
 
@@ -45,7 +38,7 @@ export class UserChangePaswordComponent implements OnInit {
   
 
   onSubmit() {
-    this.userdetail.id = this.UserIdConnected;
+
     
     this.userService.ChangePassword(this.userdetail).subscribe(res => {
       this.toastr.success('تم إعادة تعيين كلمة المرور الخاصة بك', 'نجاح');

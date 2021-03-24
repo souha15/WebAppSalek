@@ -388,6 +388,9 @@ import { TicketDetailAgentComponent } from './Maintenance/ticket-detail-agent/ti
 import { PageFrwardedToTicketListForAgentCodeComponent } from './Maintenance/page-frwarded-to-ticket-list-for-agent-code/page-frwarded-to-ticket-list-for-agent-code.component';
 import { TicketDetailClientComponent } from './Maintenance/ticket-detail-client/ticket-detail-client.component';
 import { ChatComponent } from './Chat/chat/chat.component';
+import { MsgInterneAddComponent } from './Msg Interne/msg-interne-add/msg-interne-add.component';
+import { MsgInterneListComponent } from './Msg Interne/msg-interne-list/msg-interne-list.component';
+import { MsgInterneDetailsComponent } from './Msg Interne/msg-interne-details/msg-interne-details.component';
 
 
 @NgModule({
@@ -746,6 +749,9 @@ import { ChatComponent } from './Chat/chat/chat.component';
     PageFrwardedToTicketListForAgentCodeComponent,
     TicketDetailClientComponent,
     ChatComponent,
+    MsgInterneAddComponent,
+    MsgInterneListComponent,
+    MsgInterneDetailsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -925,8 +931,8 @@ import { ChatComponent } from './Chat/chat/chat.component';
 
       { path: 'medias-c/:id', component: MediasCComponent, canActivate: [AuthGuard] },
  
-      { path: 'event-edit/:id', component: EventEditComponent, canActivate: [AuthGuard], data: { permittedRoles: ['ADMINISTRATEUR'] } },
-      { path: 'event-edit', component: EventEditComponent, canActivate: [AuthGuard], data: { permittedRoles: ['ADMINISTRATEUR'] } },
+      { path: 'event-edit/:id', component: EventEditComponent, canActivate: [AuthGuard] },
+      { path: 'event-edit', component: EventEditComponent, canActivate: [AuthGuard]},
 
       { path: 'activity-c', component: ActivityCComponent, canActivate: [AuthGuard], data: { permittedRoles: ['ADMINISTRATEUR'] } },
 
@@ -1506,6 +1512,17 @@ import { ChatComponent } from './Chat/chat/chat.component';
     /************ Chat **********/
 
     { path: 'chat', component: ChatComponent, canActivate: [AuthGuard] },
+
+
+    /******* Msg Interne **********/
+
+      { path: 'msg-interne-add', component: MsgInterneAddComponent, canActivate: [AuthGuard] },
+
+      { path: 'msg-interne-list', component: MsgInterneListComponent, canActivate: [AuthGuard] },
+
+      { path: 'msg-interne-details', component: MsgInterneDetailsComponent, canActivate: [AuthGuard] },
+      { path: 'msg-interne-details/:id', component: MsgInterneDetailsComponent, canActivate: [AuthGuard] },
+
 
     ])
   ],/*,  {

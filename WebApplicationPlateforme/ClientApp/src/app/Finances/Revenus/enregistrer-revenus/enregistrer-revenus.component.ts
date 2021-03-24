@@ -65,9 +65,9 @@ export class EnregistrerRevenusComponent implements OnInit {
 
   ngOnInit(): void {
     this.DotationList();
-    this.UniteList();
     this.getUserConnected();
     this.getFiles();
+    this.getRevenusLis()
 
   }
 
@@ -94,51 +94,44 @@ export class EnregistrerRevenusComponent implements OnInit {
     })
   }
 
-  //get unite with selected dotation
 
-  uniteListG: Unite[] = [];
+  //Get Unite List whith selected dotation
+
   uniteList: Unite[] = [];
-
+  dotationid: string;
   UniteList() {
     if (this.dotationid != null) {
       this.uniteService.Get().subscribe(res => {
-        this.uniteListG = res
-        if (this.uniteListG.length != 0) {
-          this.uniteList = this.uniteListG.filter(item => { item.idDotation == +this.dotationid })
-        }
+        this.uniteList = res  
+          this.uniteList.filter(item => { item.idDotation == +this.dotationid })        
       })
 
     }
   }
-  // Get Selected Unite
 
+  //Get Dotation Selected
   isDotationSelected: boolean = false;
-  dotationid: string;
   dotationName: string;
   selectInput(event) {
     this.dotationid = event.target.value;
     this.dotationService.GetById(+this.dotationid).subscribe(res => {
       this.dotationName = res.nom
+      this.UniteList();
     })
-    if (this.dotationid != null) {
-      this.uniteService.Get().subscribe(res => {
-        this.uniteListG = res
-        if (this.uniteListG != null) {
-          this.uniteList = this.uniteListG.filter(item => item.idDotation == +this.dotationid)
-        }
-      })
-
-    }
   }
 
 
+  // Get Selected Unite
   //get Unite
   uniteid: string;
   loc: LocataireDot[] = [];
   loc2: LocataireDot[] = [];
+  listr1: Revenus[] = []
+  listr2: Revenus[] = []
   locDetails: LocataireDot = new LocataireDot();
   LocationId: number;
   showtable: boolean = false;
+
   selectInput2(event) {
     this.uniteid = event.target.value;
     this.uniteService.GetById(+this.uniteid).subscribe(res => {
@@ -148,9 +141,10 @@ export class EnregistrerRevenusComponent implements OnInit {
       this.prixlocation = res.prix;
       this.LocationService.Get().subscribe(res => {
         this.loc = res
-        this.loc2 = this.loc.filter(item => item.idUnite == +this.uniteid && item.idDotation == +this.dotationid)
+        this.loc2 =  this.loc.filter(item => item.idUnite == +this.uniteid && item.idDotation == +this.dotationid)
         this.loc2.forEach(item => {
           this.locDetails = item
+          this.LocationRetard = this.locDetails
           this.LocationId = this.locDetails.id;
           this.locataireName = this.locDetails.nom;
           this.debutContrat = this.locDetails.datedebutcontrat;
@@ -168,100 +162,136 @@ export class EnregistrerRevenusComponent implements OnInit {
       }
     })
   }
-  p: Number = 1;
-  count: Number = 5;
-  listr1: Revenus[]=[]
-  listr2: Revenus[]=[]
-  //Retard
+
+  //Get Date Difference for new
+  getDateDifferenceNew(currentdate, debutContrat): number
+  {
+    var currentmonth = currentdate.getMonth() + 1;
+    var currentyear = currentdate.getFullYear();
+    //Get Location Month and year
+    let newDate = new Date(debutContrat);
+    var MoisdebutContrat = newDate.getMonth() + 1
+    var AnneedebutContrat = newDate.getFullYear();
+    var months;
+    months = (currentyear - AnneedebutContrat) * 12;
+    months -= MoisdebutContrat;
+    months += currentmonth;
+    months <= 0 ? 0 : months;
+    this.nbmonths = months + 1;
+    return this.nbmonths
+  }
+
+  //Get Date Difference for old
+  getDateDifferenceOld(currentdate, debutContrat): number {
+    var currentmonth = currentdate.getMonth() + 1;
+    var currentyear = currentdate.getFullYear();
+    //Get Location Month and year
+    let newDate = new Date(debutContrat);
+    var MoisdebutContrat = newDate.getMonth() + 1
+    var AnneedebutContrat = newDate.getFullYear();
+    var months;
+    months = (currentyear - AnneedebutContrat) * 12;
+    months -= MoisdebutContrat;
+    months += currentmonth;
+    months <= 0 ? 0 : months;
+    this.nbmonths = months + 1;
+    return this.nbmonths
+  }
+
+
+  getRevenusLis() {
+    //Filtering
+    this.revenusService.Get().subscribe(res => {
+      this.revenusRetardList = res
+      return this.revenusRetardList;
+    })
+  }
+
+
+  //Calcul de retard
   prixpaye: number;
   retardTest(event) {
     this.prixpaye = +event.target.value;
-    this.tot = (+this.dette + +this.prixlocation) - +this.prixpaye
+    this.tot = this.neded - +this.prixpaye
   }
-  //On Submit
+  //Calcul retard
   revenus: Revenus = new Revenus();
   tot: number = 0;
   locataireName: string;
   prixlocation: string;
-  dette: number;
+  dette: number =0;
   LocationRetard: LocataireDot = new LocataireDot();
   currentdate = new Date();
-  currentmonth: any;
-  currentyear: any;
-  debutContrat: any;
-  AnneedebutContrat: any
-  MoisdebutContrat: any;
   revenusRetardList: Revenus[] = [];
   FiltredrevenusRetardList: Revenus[] = [];
+  lastmonthModel: Revenus = new Revenus();
+  lastmonthList: Revenus[] = [];
   nbmonths: any;
-  nbMoisNonPaye: number;
   neded: number = 0;
+  debutContrat: any;
+  nbMoisPaye: number = 0;
+  nbMoisNonPaye: number = 0;
   CalculRetard() {
 
-    this.LocationRetard = this.locDetails
     if (this.LocationRetard.date == "جديد") {
-      //Get current Month and year 
-      this.currentmonth = this.currentdate.getMonth() + 1;
-      this.currentyear = this.currentdate.getFullYear();
-
-      //Get Location Month and year
-      this.debutContrat = this.LocationRetard.datedebutcontrat
-      let newDate = new Date(this.debutContrat);
-      this.MoisdebutContrat = newDate.getMonth() + 1
-      this.AnneedebutContrat = newDate.getFullYear();
-
-
-      var months;
-      months = (this.currentyear - this.AnneedebutContrat) * 12;
-      months -= this.MoisdebutContrat;
-      months += this.currentmonth;
-      months <= 0 ? 0 : months;
-      this.nbmonths = months + 1;
-      console.log(this.nbmonths)
-      //Filtering
-      this.revenusService.Get().subscribe(res => {
-
-        this.revenusRetardList = res
-        this.FiltredrevenusRetardList = this.revenusRetardList.filter(item => item.idunite == this.LocationRetard.idUnite && item.iddotation == this.LocationRetard.idDotation)
-        if (this.FiltredrevenusRetardList.length < this.nbmonths) {
-          this.nbMoisNonPaye = this.nbmonths - this.FiltredrevenusRetardList.length
-
-          if (this.nbMoisNonPaye > 1) {
-            this.nbMoisNonPaye = this.nbMoisNonPaye - 1;
-            this.dette = +this.prixlocation * this.nbMoisNonPaye;
-            this.revenus.restePrixTotaleLocation = this.dette.toString();
-          }
-          if (this.nbMoisNonPaye == 1) {
-            this.dette = 0
-          }
-          this.neded = +this.prixlocation + this.dette
-        }
-
-
+      this.getRevenusLis();
+      this.debutContrat = this.LocationRetard.datedebutcontrat;
+      this.FiltredrevenusRetardList = this.revenusRetardList.filter(item => item.idunite == this.LocationRetard.idUnite && item.iddotation == this.LocationRetard.idDotation)
+      this.nbMoisPaye = this.FiltredrevenusRetardList.length;
+      this.nbmonths = this.getDateDifferenceNew(this.currentdate, this.debutContrat);
+      this.nbMoisNonPaye = this.nbmonths - this.nbMoisPaye;
+      if (this.FiltredrevenusRetardList.length == 0) {
+        this.neded = +this.prixlocation * this.nbmonths
+        this.dette =  this.neded - +this.prixlocation
       }
-      )
+      else {
+        //Get the last month
+
+
+        this.lastmonthList = this.FiltredrevenusRetardList.sort((a, b) => new Date(a.dateenreg).getTime() - new Date(b.dateenreg).getTime());
+        this.lastmonthModel = this.lastmonthList[this.lastmonthList.length - 1];
+        console.log(this.lastmonthModel)
+        console.log(this.lastmonthList)
+        console.log(this.FiltredrevenusRetardList)
+        if (this.nbMoisNonPaye == 0) {
+          this.dette = 0;
+          this.tot = null;
+          this.neded = null;
+        } else {
+          this.neded = +this.prixlocation * this.nbMoisNonPaye + +this.lastmonthModel.restePrixService;
+          this.dette = this.neded - +this.prixlocation
+        }
+      }
+
+
     } else {
-      //Get current Month and year
-      this.dette = +this.LocationRetard.attribut5;
-      this.currentmonth = this.currentdate.getMonth() + 1;
-      this.currentyear = this.currentdate.getFullYear();
+      this.getRevenusLis();
+      this.debutContrat = this.LocationRetard.attribut1;
+      this.FiltredrevenusRetardList = this.revenusRetardList.filter(item => item.idunite == this.LocationRetard.idUnite && item.iddotation == this.LocationRetard.idDotation)
+      this.nbMoisPaye = this.FiltredrevenusRetardList.length;
+      this.nbmonths = this.getDateDifferenceNew(this.currentdate, this.debutContrat);
+      this.nbMoisNonPaye = this.nbmonths - this.nbMoisPaye;
+      if (this.FiltredrevenusRetardList.length == 0) {
+        this.neded = +this.prixlocation * this.nbmonths + +this.LocationRetard.attribut5
+        this.dette = this.neded - +this.prixlocation
+      } else {
 
-      //Get Location Month and year
-      this.debutContrat = this.LocationRetard.attribut1
-      let newDate = new Date(this.debutContrat);
-      this.MoisdebutContrat = newDate.getMonth() + 1
-      this.AnneedebutContrat = newDate.getFullYear();
 
-
-      var months;
-      months = (this.currentyear - this.AnneedebutContrat) * 12;
-      months -= this.MoisdebutContrat;
-      months += this.currentmonth;
-      months <= 0 ? 0 : months;
-      this.nbmonths = months + 1;
-      console.log(this.nbmonths)
-      //Filtering
-      this.revenusService.Get().subscribe(res => {
+        this.lastmonthList = this.FiltredrevenusRetardList.sort((a, b) => new Date(a.dateenreg).getTime() - new Date(b.dateenreg).getTime());
+        this.lastmonthModel = this.lastmonthList[this.lastmonthList.length - 1];
+        console.log(this.lastmonthModel)
+        console.log(this.lastmonthList)
+        console.log(this.FiltredrevenusRetardList)
+        if (this.nbMoisNonPaye == 0) {
+          this.dette = 0;
+          this.tot = null;
+          this.neded = null;
+        } else {
+          this.neded = +this.prixlocation * this.nbMoisNonPaye + +this.lastmonthModel.restePrixService + +this.LocationRetard.attribut5;
+          this.dette = this.neded - +this.prixlocation
+        }
+      }
+   /*   this.revenusService.Get().subscribe(res => {
 
         this.revenusRetardList = res
         this.FiltredrevenusRetardList = this.revenusRetardList.filter(item => item.idunite == this.LocationRetard.idUnite && item.iddotation == this.LocationRetard.idDotation)
@@ -281,25 +311,24 @@ export class EnregistrerRevenusComponent implements OnInit {
 
 
       }
-      )
+      )*/
     }
 
 
   }
 
-
   Createdrevenus: Revenus = new Revenus();
-  reste: number;
-  prixser: number;
+  reste: number=0;
+  prixser: number=0;
   isValidFormSubmitted = false;
-  date = new Date().toLocaleDateString();
+  date = new Date().toLocaleString();
   revenusId: number;
   onSubmit(form: NgForm) {
 
     let path = this.rootUrl.getPath();
     this.fileslist.forEach(item => {
       this.revenus.attribut3 = item;
-    
+
     })
 
     this.revenus.creatorName = this.UserNameConnected;
@@ -312,6 +341,16 @@ export class EnregistrerRevenusComponent implements OnInit {
     this.revenus.nomLocataire = this.locataireName;
     this.revenus.prixLocation = this.prixlocation;
     this.reste = +this.prixlocation - this.prixpaye;
+    var diffsomme: number = 0;
+    if (+this.prixpaye > +this.prixlocation) {
+      diffsomme = +this.prixpaye - +this.prixlocation
+      this.revenus.restePrixService = (+this.lastmonthModel.restePrixService - diffsomme).toString();
+    } else if (+this.prixpaye == +this.prixlocation) {
+      this.revenus.restePrixService = this.lastmonthModel.restePrixService
+    } else {
+      this.revenus.restePrixService = this.reste.toString();
+    }
+    this.revenus.restePrixTotale = this.tot.toString();
     let calc: number;
     calc = +this.dette - +this.prixlocation;
     this.dette = calc
@@ -323,14 +362,20 @@ export class EnregistrerRevenusComponent implements OnInit {
     } else {
       this.isValidFormSubmitted = true
       this.revenusService.Add(this.revenus).subscribe(res => {
-        
+
         this.revenusId = res.id
         if (this.dette < 0) {
           this.dette = 0
-        }else
-        this.dette = calc
+        } else {
+          this.dette = calc
+      }
 
         this.toastr.success("تمت الإضافة بنجاح", "نجاح");
+        this.tot = null;
+        this.dette = null;
+        this.neded = null;
+        this.prixlocation = null;
+        this.locataireName = null;
         this.listr2.push(this.revenus)
 
         //Eau
@@ -355,15 +400,10 @@ export class EnregistrerRevenusComponent implements OnInit {
 
     }
   }
+ 
+  p: Number = 1;
+  count: Number = 5;
 
-
-  resetingdata() {
-    this.tot = 0;
-    this.neded = 0;
-    this.dette = 0;
-    this.prixlocation = "0";
-    this.locataireName = "";
-  }
   //Files
 
 

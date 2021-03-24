@@ -205,7 +205,7 @@ namespace WebApplicationPlateforme.Controllers.UserControllers
 
 
         [HttpGet]
-        [Authorize(Roles = "ADMINISTRATEUR,RESPFINANCE", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "ADMINISTRATEUR,DIRECTORG", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("ForAdminOrFinanceResp")]
         public string GetForAdminOrFinanceResp()
         {
